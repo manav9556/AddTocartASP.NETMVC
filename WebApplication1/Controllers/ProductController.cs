@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.IO;
 using WebApplication1.Models;
 using WebApplication1.Repositories;
-
 
 namespace WebApplication1.Controllers
 {
@@ -11,8 +12,6 @@ namespace WebApplication1.Controllers
     {
         private readonly ProductDbContext _dbContext;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
-
         private readonly ProductRepository _productRepository;
 
         public ProductController(ProductDbContext dbContext, IWebHostEnvironment webHostEnvironment, ProductRepository productRepository)
@@ -22,11 +21,10 @@ namespace WebApplication1.Controllers
             _productRepository = productRepository;
         }
 
-
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            ProductModel productModel = new ProductModel();
-            ViewBag.products = productModel.FindAll();
+            var products = _productRepository.GetAllProducts();
+            ViewBag.products = products;
             return View();
         }
 
@@ -35,18 +33,17 @@ namespace WebApplication1.Controllers
             return View();
         }
 
-
-
         [HttpPost]
+       
         public IActionResult Create(Product model)
         {
             try
             {
                 Product product = new Product();
-               product.Id = model.Id;
+                product.Id = model.Id;
                 product.Name = model.Name;
                 product.Description = model.Description;
-               
+
                 product.Price = model.Price;
 
                 if (model.ImageFile != null && model.ImageFile is IFormFile imageFile)
@@ -59,14 +56,15 @@ namespace WebApplication1.Controllers
                         imageFile.CopyTo(fileStream);
                     }
                     product.Image = uniqueFileName;
+                    product.ImageFileName = uniqueFileName;
                 }
 
                 _dbContext.Products.Add(product);
                 _dbContext.SaveChanges();
 
-                var newlyAddedProduct = _dbContext.Products.Find(product.Id); 
+                var newlyAddedProduct = _dbContext.Products.Find(product.Id);
 
-                // Pass the newly added product to the view
+
                 ViewBag.NewProduct = newlyAddedProduct;
 
                 return RedirectToAction("Index");
@@ -77,13 +75,10 @@ namespace WebApplication1.Controllers
             }
         }
 
-        
-
-
         [HttpGet]
-        public IActionResult Edit(Product Model)
+        public IActionResult Edit(int id)
         {
-            var product = Model.Id;
+            var product = _productRepository.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -91,13 +86,39 @@ namespace WebApplication1.Controllers
 
             return View(product);
         }
+        public IActionResult Edit(Product model)
+        {
+            
+                try
+                {
+                    var existingProduct = _dbContext.Products.Find(model.Id);
 
-       
+                    if (existingProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingProduct.Name = model.Name;
+                    existingProduct.Description = model.Description;
+                    existingProduct.Price = model.Price;
+
+                    _dbContext.SaveChanges();
+
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "An error occurred while editing the product.");
+                }
+            
+
+            return View(model);
+        }
 
         [HttpGet]
-        public IActionResult Delete(Product Model)
+        public IActionResult Delete(int id)
         {
-            var product = Model.Id;
+            var product = _productRepository.GetProductById(id);
             if (product == null)
             {
                 return NotFound();
@@ -105,8 +126,29 @@ namespace WebApplication1.Controllers
 
             return View(product);
         }
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            try
+            {
+                var productToDelete = _dbContext.Products.Find(id);
 
-        
+                if (productToDelete == null)
+                {
+                    return NotFound();
+                }
 
+                _dbContext.Products.Remove(productToDelete);
+                _dbContext.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                // Handle any deletion errors
+                return RedirectToAction("Index");
+            }
+        }
     }
+
 }
