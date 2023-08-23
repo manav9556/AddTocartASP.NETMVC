@@ -1,4 +1,4 @@
-﻿using System;
+/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,20 +9,20 @@ namespace WebApplication1.Models
     {
         private List<Product> products;
 
-        public ProductModel()
-        {
-            this.products = new List<Product>() {
+       *//* public ProductModel()
+        {*/
+            /*this.products = new List<Product>() {
                 new Product {
                     Id = 1,
                     Name = "Product 1",
                     Price = 11,
-                    ImageFileName = "Toy2.jpeg"
+                    ImageFile = "Toy2.jpeg"
                 },
                 new Product {
                     Id = 2,
                     Name = "Product 2",
                     Price = 20,
-                    ImageFileName = "Toy3.jpeg"
+                    ImageFile = "Toy3.jpeg"
                 },
                 new Product {
                     Id = 3,
@@ -40,16 +40,16 @@ namespace WebApplication1.Models
                     Id = 5,
                     Name = "Product 5",
                     Price = 105,
-                    ImageFileName = "Toy6.jpeg"
+                    ImageFile = "Toy6.jpeg"
                 },
                    new Product {
                     Id = 6,
                     Name = "Product 6",
                     Price = 150,
-                    ImageFileName = "Toy7.jpeg"
+                    ImageFile = "Toy7.jpeg"
                 }
             };
-        }
+        }*//*
 
         public List<Product> FindAll()
         {
@@ -62,3 +62,4 @@ namespace WebApplication1.Models
         }
     }
 }
+*/
