@@ -19,6 +19,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>ImageFileName</th>
+                    <th>Description</th>
                     <th>Price</th>
                     <th>Actions</th>
                 </tr>
@@ -30,6 +31,7 @@
                         <td>@product.Id</td>
                         <td>@product.Name</td>
                         <td><img src="~/Images2/@product.Image" width="60" /> </td>
+                        <td>@product.Description</td>
                         <td>@product.Price</td>
                         <td>
                             <div class="btn-group">
@@ -47,23 +49,6 @@
         </div>
     </div>
     
-    @if (ViewBag.NewProduct != null)
-    {
-        <div class="container mt-4">
-            <h2>Newly Added Product</h2>
-            <div>
-                <p><strong>Name:</strong> @ViewBag.NewProduct.Name</p>
-                <p><strong>Description:</strong> @ViewBag.NewProduct.Description</p>
-                <p><strong>Price:</strong> @ViewBag.NewProduct.Price</p>
-                @* Display the image if available *@
-                @if (!string.IsNullOrEmpty(ViewBag.NewProduct.ImageFileName))
-                {
-                    <img src="~/Images2/@ViewBag.NewProduct.ImageFileName" width="200" alt="Product Image" />
-                }
-            </div>
-
-            <a asp-controller="Product" asp-action="Index" class="btn btn-primary">Back to Products</a>
-        </div>
-    }
+    
 </body>
 </html>
