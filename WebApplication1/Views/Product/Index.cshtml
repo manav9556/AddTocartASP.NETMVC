@@ -1,6 +1,4 @@
-﻿@{
-    Layout = null;
-}
+
 @using WebApplication1.Models
 
 <!DOCTYPE html>
@@ -31,7 +29,7 @@
                     <tr>
                         <td>@product.Id</td>
                         <td>@product.Name</td>
-                        <td><img src="~/Images2/@product.ImageFileName" width="60" /> </td>
+                        <td><img src="~/Images2/@product.Image" width="60" /> </td>
                         <td>@product.Price</td>
                         <td>
                             <div class="btn-group">
@@ -48,6 +46,7 @@
             <a asp-controller="Product" asp-action="Create" class="btn btn-primary">Add Product</a>
         </div>
     </div>
+    
     @if (ViewBag.NewProduct != null)
     {
         <div class="container mt-4">
