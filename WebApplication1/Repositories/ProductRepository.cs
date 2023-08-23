@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebApplication1.Models;
 
@@ -13,9 +15,14 @@ namespace WebApplication1.Repositories
             _dbContext = dbContext;
         }
 
-        public IEnumerable<Product> GetAllProducts()
+        public List<Product> GetAllProducts()
         {
             return _dbContext.Products.ToList();
+        }
+
+        public Product GetProductById(int id)
+        {
+            return _dbContext.Products.FirstOrDefault(p => p.Id == id);
         }
 
         public void AddProduct(Product product)
